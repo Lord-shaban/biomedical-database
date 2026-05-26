@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Biomedical Centre Database</title>
+    <style>
+        /* Reset */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f9fafc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #0077cc, #00aaff);
+            color: white;
+            text-align: center;
+            padding: 2rem 1rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }
+
+        /* Navigation */
+        nav {
+            background: #ffffff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+        nav ul li { margin: 0 15px; }
+        nav ul li a {
+            text-decoration: none;
+            color: #0077cc;
+            font-weight: bold;
+            padding: 10px;
+            transition: color 0.3s ease;
+        }
+        nav ul li a:hover { color: #005fa3; }
+
+        /* Main Content */
+        main { padding: 2rem; min-height: 60vh; }
+        .welcome { text-align: center; margin-top: 50px; }
+
+        /* Forms */
+        form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 500px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        form label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        form input, form textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        form button {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #0077cc;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        form button:hover { background: #005fa3; }
+
+        /* Tables */
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        table th {
+            background: #0077cc;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #f1f1f1;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Biomedical Centre Management</h1>
+        <p>Explore and manage journals, research, authors, and publishers</p>
+    </header>
+
+    <nav>
+        <ul>
+            <li><a href="#" onclick="loadData('authors')">Authors</a></li>
+            <li><a href="#" onclick="loadData('research')">Research</a></li>
+            <li><a href="#" onclick="loadData('journals')">Journals</a></li>
+            <li><a href="#" onclick="loadData('publishers')">Publishers</a></li>
+        </ul>
+    </nav>
+
+    <main id="content">
+        <div class="welcome">
+            <h2>Welcome</h2>
+            <p>Select a section above to manage biomedical data.</p>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Biomedical Centre | Designed with ❤️</p>
+    </footer>
+
+    <script>
+        function loadData(endpoint) {
+            document.getElementById("content").innerHTML = "<p style='text-align:center;'>Loading...</p>";
+            
+            fetch('http://localhost:3000/api/' + endpoint)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length === 0) {
+                        document.getElementById("content").innerHTML = "<p style='text-align:center;'>لا توجد بيانات متاحة في قاعدة البيانات.</p>";
+                        return;
+                    }
+                    
+                    let table = '<table><tr>';
+                    // جلب أسماء الأعمدة كعناوين للجدول
+                    let keys = Object.keys(data[0]);
+                    keys.forEach(key => {
+                        table += `<th>${key}</th>`;
+                    });
+                    table += '</tr>';
+                    
+                    // توليد الصفوف والبيانات
+                    data.forEach(row => {
+                        table += '<tr>';
+                        keys.forEach(key => {
+                            table += `<td>${row[key]}</td>`;
+                        });
+                        table += '</tr>';
+                    });
+                    table += '</table>';
+                    
+                    document.getElementById("content").innerHTML = `<h2 style='text-align:center;text-transform:capitalize;margin-bottom:15px;'>${endpoint}</h2>` + table;
+                })
+                .catch(err => {
+                    document.getElementById("content").innerHTML = "<p style='color:red;text-align:center;'>خطأ في جلب البيانات! يرجى التأكد من تشغيل خادم Node.js.</p>";
+                    console.error(err);
+                });
+        }
+    </script>
+</body>
+</html>
