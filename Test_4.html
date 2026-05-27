@@ -137,8 +137,13 @@
         function loadData(endpoint) {
             document.getElementById("content").innerHTML = "<p style='text-align:center;'>Loading...</p>";
             
-            fetch('http://localhost:3000/api/' + endpoint)
-                .then(response => response.json())
+            fetch('http://127.0.0.1:3000/api/' + endpoint)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("HTTP Status " + response.status);
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.error) {
                         document.getElementById("content").innerHTML = `<p style='color:red;text-align:center;'><b>حدث خطأ في قاعدة البيانات:</b><br>${data.message}<br><br>👉 المرجو التأكد من أنك قمت باستيراد ملف (Biomeidcal.sql) داخل قاعدة البيانات.</p>`;
@@ -170,7 +175,7 @@
                     document.getElementById("content").innerHTML = `<h2 style='text-align:center;text-transform:capitalize;margin-bottom:15px;'>${endpoint}</h2>` + table;
                 })
                 .catch(err => {
-                    document.getElementById("content").innerHTML = "<p style='color:red;text-align:center;'>خطأ في جلب البيانات! يرجى التأكد من تشغيل خادم Node.js.</p>";
+                    document.getElementById("content").innerHTML = `<p style='color:red;text-align:center;'><b>خطأ في جلب البيانات!</b><br>تفاصيل الخطأ: ${err.message}<br>يرجى التأكد من تشغيل خادم Node.js.</p>`;
                     console.error(err);
                 });
         }
