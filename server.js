@@ -27,28 +27,28 @@ db.connect((err) => {
 // المسارات (Endpoints) لاجلب البيانات
 app.get('/api/authors', (req, res) => {
     db.query('SELECT * FROM Author', (err, results) => {
-        if (err) res.status(500).send(err);
+        if (err) res.status(500).json({ error: true, message: err.message });
         else res.json(results);
     });
 });
 
 app.get('/api/research', (req, res) => {
     db.query('SELECT * FROM Research', (err, results) => {
-        if (err) res.status(500).send(err);
+        if (err) res.status(500).json({ error: true, message: err.message });
         else res.json(results);
     });
 });
 
 app.get('/api/journals', (req, res) => {
     db.query('SELECT * FROM Journal', (err, results) => {
-        if (err) res.status(500).send(err);
+        if (err) res.status(500).json({ error: true, message: err.message });
         else res.json(results);
     });
 });
 
 app.get('/api/publishers', (req, res) => {
     db.query('SELECT * FROM Publisher', (err, results) => {
-        if (err) res.status(500).send(err);
+        if (err) res.status(500).json({ error: true, message: err.message });
         else res.json(results);
     });
 });

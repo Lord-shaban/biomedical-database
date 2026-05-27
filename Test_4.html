@@ -140,6 +140,10 @@
             fetch('http://localhost:3000/api/' + endpoint)
                 .then(response => response.json())
                 .then(data => {
+                    if (data.error) {
+                        document.getElementById("content").innerHTML = `<p style='color:red;text-align:center;'><b>حدث خطأ في قاعدة البيانات:</b><br>${data.message}<br><br>👉 المرجو التأكد من أنك قمت باستيراد ملف (Biomeidcal.sql) داخل قاعدة البيانات.</p>`;
+                        return;
+                    }
                     if (data.length === 0) {
                         document.getElementById("content").innerHTML = "<p style='text-align:center;'>لا توجد بيانات متاحة في قاعدة البيانات.</p>";
                         return;

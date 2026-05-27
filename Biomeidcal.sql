@@ -55,21 +55,6 @@ CREATE TABLE Biomedical_Fields (
     FOREIGN KEY (Research_ID) REFERENCES Research(Research_ID) ON DELETE CASCADE
 );
 
-use Biomedical;
-CREATE TABLE Author_Interests (
-    Author_ID INT,
-    Field_Name VARCHAR(100),
-    PRIMARY KEY (Author_ID, Field_Name),
-    FOREIGN KEY (Author_ID) REFERENCES Author(Author_ID) ON DELETE CASCADE
-);
-
-CREATE TABLE Biomedical_Fields (
-    Research_ID INT,
-    Field_Name VARCHAR(100),
-    PRIMARY KEY (Research_ID, Field_Name),
-    FOREIGN KEY (Research_ID) REFERENCES Research(Research_ID) ON DELETE CASCADE
-);
-
 CREATE TABLE Research_Authors (
     Research_ID INT,
     Author_ID INT,
